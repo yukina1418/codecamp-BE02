@@ -5,7 +5,8 @@ function solution(phone) {
   let arr = phone.split("");
   // 여기에서 작성해주세요.
 
-  return arr.fill("*", 7, 11);
+  arr = arr.fill("*", 7, 11);
+  return arr.join("");
 }
 
 console.log("결과", solution("01012345678")); // "0101234****"
