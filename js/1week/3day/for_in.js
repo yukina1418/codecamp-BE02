@@ -7,10 +7,6 @@ const obj = {
   contents: "Nothing to say",
 };
 
-// console.log(Object.values(obj)[0]);
-// console.log(Object.keys(obj)[0]);
-// console.log((obj.title = obj.title.toUpperCase()));
-
 for (let key in obj) {
   if (key === "title" || key === "name") {
     obj.title = obj.title.toUpperCase();

@@ -18,7 +18,6 @@ function out(number) {
   return num.join("");
 }
 export function getWelcomeTemplate({ email, number, phone, likeSite }) {
-  out(number);
   return `
         <html>
             <body> 

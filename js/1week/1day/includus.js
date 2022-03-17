@@ -10,3 +10,16 @@ const front = ["아라", "세준", "재환"];
 const back = ["지연", "아라", "재훈"];
 const result = solution(front, back);
 console.log("결과", result); // ["아라"]
+
+/*
+function solution(aisa, kanji) {
+  return aisa.filter((it) => kanji.includes(it));
+}
+
+const aisa = ["대한민국", "러시아", "태국", "일본"];
+const kanji = ["대한민국", "일본", "중국"];
+const result = solution(aisa, kanji);
+console.log("결과", result);
+
+aisa.filter()
+*/

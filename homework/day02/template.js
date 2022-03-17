@@ -15,12 +15,11 @@ import { emailCheck, getWelcomeTemplate, sendTemplateEmail } from "./lib.js";
 
 function createUser({ email, number, phone, likeSite }) {
   const isValid = emailCheck(email);
-  {
-    if (isValid) {
-      const mytemplate = getWelcomeTemplate({ email, number, phone, likeSite });
 
-      sendTemplateEmail(mytemplate);
-    }
+  if (isValid) {
+    const mytemplate = getWelcomeTemplate({ email, number, phone, likeSite });
+
+    sendTemplateEmail(mytemplate);
   }
 }
 
