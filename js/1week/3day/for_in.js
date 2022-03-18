@@ -22,4 +22,9 @@ console.log(obj);
 //   title : "THE TITLE",
 //   name : "JANE",
 //   contents: "Nothing to say"
+// // }
+// for (let key in obj) {
+//   if (key === "title" || key === "name") {
+//      obj[key] = obj[key].toUpperCase();
+//   }
 // }
