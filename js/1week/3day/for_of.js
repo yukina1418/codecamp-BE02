@@ -5,7 +5,7 @@ const arr = [11, 22, 33, 44, 55];
 let sum = 0;
 
 for (number of arr) {
-  sum = sum + number;
+  sum += number;
 }
 
 console.log(sum); // 165

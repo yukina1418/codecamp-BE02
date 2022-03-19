@@ -7,11 +7,7 @@ function solution(arr) {
   let str = "";
 
   for (let i = 0; i < arr.length; i++) {
-    if (typeof arr[i] === "number") {
-      sum = sum + arr[i];
-    } else {
-      str = str + arr[i];
-    }
+    typeof arr[i] === "number" ? (sum = sum + arr[i]) : (str = str + arr[i]);
   }
 
   return [sum, str];
