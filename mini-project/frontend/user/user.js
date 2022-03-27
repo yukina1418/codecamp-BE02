@@ -8,7 +8,6 @@ const getUser = async () => {
     console.log(res.data);
     for (i = 0; i < res.data.length; i++) {
       createUserDiv(res.data[i]);
-      console.log(res.data[1].og);
     }
     createUserDiv();
   });

@@ -26,9 +26,9 @@ export function getWelcomeTemplate(name, phone, prefer) {
 }
 
 export async function sendTemplateEmail(email, mytemplate) {
-  const appKey = "B5rcqHp3To4Et87f";
-  const XSecretKey = "T033Z4kC";
-  const sender = "support@yuikna.site";
+  const appKey = process.env.EMAIL_APP_KEY;
+  const XSecretKey = process.env.EMAIL_X_SECRET_KEY;
+  const sender = process.env.EMAIL_SENDER;
   const result = await axios.post(
     `https://api-mail.cloud.toast.com/email/v2.0/appKeys/${appKey}/sender/mail`,
     {

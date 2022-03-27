@@ -1,5 +1,5 @@
 import { checkValidationPhone, getToken, sendTokenToSMS } from "./phone.js";
-import { emailSend, ogGet } from "./ogGet.js";
+import { emailSend, ogGet, cross } from "./ogGet.js";
 
 import express from "express";
 import mongoose from "mongoose";
@@ -28,8 +28,11 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(options)));
 
 app.post("/user", async (req, res) => {
   const user = req.body.user;
-  console.log(user);
-  console.log(user.pwd);
+
+  const crossCheck = await cross(user);
+  if (crossCheck === false) {
+    res.status(200).send("입력되지 않은 문구가 존재합니다.");
+  }
 
   const Token = await Phone.findOne({ phone: `${user.phone}` }).exec();
 
@@ -70,20 +73,19 @@ app.get("/users", async (req, res) => {
 app.post("/tokens/phone", async (req, res) => {
   const phone = req.body.myphone;
   let check = await Phone.findOne({ phone: `${phone}` }).exec();
-  if (check === null) {
-    check = "1";
-  }
 
   checkValidationPhone(phone);
   // 1.  휴대폰 번호 자리수 맞는지 확인하기
   const isValid = checkValidationPhone(phone);
-  if (isValid) {
+  if (isValid === false) {
+    res.status(200).send("입력하신 번호가 올바른 번호가 아닙니다.");
+  } else {
     // 2. 핸드폰 토큰 6자리 만들기
     const mytoken = getToken();
     // 3. 핸드폰 번호에 토큰 정보 전송하기
     sendTokenToSMS(phone, mytoken);
 
-    if (phone !== check.phone) {
+    if (check === null || phone !== check.phone) {
       const myphone = new Phone({
         token: mytoken,
         phone: `${phone}`,
@@ -92,9 +94,8 @@ app.post("/tokens/phone", async (req, res) => {
       await myphone.save();
       res.status(201).send("인증번호 발송 완료!");
     } else {
-      res.status(200).send("인증번호가 변경되었습니다!");
-
       await Phone.updateOne({ phone: `${phone}` }, { token: mytoken });
+      res.status(200).send("인증번호가 변경되었습니다!");
     }
   }
 });
