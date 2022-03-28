@@ -29,14 +29,14 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(options)));
 app.post("/user", async (req, res) => {
   const user = req.body.user;
 
-  const crossCheck = await cross(user);
-  if (crossCheck === false) {
-    res.status(200).send("입력되지 않은 문구가 존재합니다.");
-  }
+  // const crossCheck = await cross(user);
+  // if (crossCheck === false) {
+  //   res.status(200).send("입력되지 않은 문구가 존재합니다.");
+  // }
 
   const Token = await Phone.findOne({ phone: `${user.phone}` }).exec();
 
-  if (Token === null || undefined || Token.isAuth === false) {
+  if (Token === null || Token.isAuth === false) {
     res.status(422).send("에러!! 핸드폰 번호가 인증되지 않았습니다.");
   } else {
     const obj = await ogGet(user.prefer);
@@ -59,10 +59,7 @@ app.post("/user", async (req, res) => {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get("/users", async (req, res) => {
-  // Board.find() 모든 보드
   const result = await User.find();
-
-  // 2. 꺼내온 결과 응답 주기
   res.send(result);
 });
 
