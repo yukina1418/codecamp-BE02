@@ -1,0 +1,159 @@
+* {
+  box-sizing: border-box;
+  font-family: Noto Sans CJK KR;
+  font-style: normal;
+  font-weight: normal;
+}
+#background {
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.main {
+  width: 540px;
+  height: 960px;
+  background: #ffffff;
+  border: 1px solid #aacdff;
+  box-shadow: 7px 7px 39px rgba(0, 104, 255, 0.25);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.box {
+  width: 380px;
+  height: 818px;
+  margin: 72px 100px 70px 100px;
+}
+/* 제목 */
+#camp {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 47px;
+
+  color: #0068ff;
+}
+/* 상단 4개 입력문*/
+.email {
+  width: 100%;
+  height: 60px;
+  margin-top: 60px;
+  margin-bottom: 20px;
+}
+
+.name,
+.password,
+.passwordCheck {
+  width: 100%;
+  height: 60px;
+  margin-bottom: 20px;
+}
+
+/* 번호 입력 */
+.phone {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+#num1,
+#num2,
+#num3 {
+  width: 100px;
+  height: 40px;
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+}
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  height: 60px;
+  border-radius: 7px;
+  border: 1px solid #d2d2d2;
+  text-align: center;
+}
+
+/* 인증 신청 */
+.auth {
+  display: flex;
+  flex-direction: space-between;
+  justify-content: end;
+  margin-bottom: 20px;
+}
+#otp {
+  padding: 10px 21px 10px 0px;
+  font-size: 15px;
+}
+#sendMessage {
+  width: 120px;
+  height: 40px;
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+  font-size: 16px;
+}
+#sendMessage:active {
+  background-color: #000000;
+}
+
+.timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  margin-bottom: 20px;
+}
+#timeLimit {
+  padding: 10px 21px 10px 0px;
+  font-size: 15px;
+}
+#end {
+  width: 120px;
+  height: 40px;
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+  font-size: 16px;
+}
+select {
+  width: 380px;
+  height: 60px;
+  border: 1px solid #d2d2d2;
+  border-radius: 7px;
+}
+/* 성별 선택 */
+.gender {
+  width: 100%;
+  height: 23.94px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  color: #000000;
+}
+
+hr {
+  background-color: #e6e6e6;
+  margin-bottom: 20px;
+}
+#signUpButton {
+  width: 100%;
+  height: 60px;
+
+  box-sizing: border-box;
+  border-radius: 10px;
+  font-size: 18px;
+  text-align: center;
+}
+.error {
+  font-size: 1px;
+  height: 20px;
+  color: red;
+  font-weight: 700;
+  text-align: center;
+}

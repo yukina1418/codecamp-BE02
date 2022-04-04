@@ -1,0 +1,80 @@
+.setAttribute() 사용법
+https://urliveblogger.blogspot.com/2021/01/js-setAttribute.html
+.InnerHTML() 사용법
+https://ponyozzang.tistory.com/685
+ document.getElementById() 사용법
+ https://kyounghwan01.github.io/blog/JS/JSbasic/getElementById/
+
+ 마우스오버,클릭
+ https://programacion.tistory.com/96
+ 
+ onclick() = 누르면 반응해라
+
+라디오 체크값 불러오기
+ https://webisfree.com/2016-05-14/[javascript]-input-%ED%83%9C%EA%B7%B8%EC%9D%98-%EC%B2%B4%ED%81%AC%EC%97%AC%EB%B6%80-%ED%99%95%EC%9D%B8%ED%95%98%EA%B8%B0-%EC%B2%B4%ED%81%AC%EA%B0%92-%EB%B6%88%EB%9F%AC%EC%98%A4%EA%B8%B0
+
+ InnerHTML랑 innerText랑 차이
+ https://hianna.tistory.com/480
+
+ 비밀번호를 입력하지 않으면 " 비밀번호를 입력해주세요"
+ 비밀번호 확인을 입력하지 않으면 " 비밀번호 확인을 입력해주세요"
+ 비밀번호가 둘이 다르고 두개 다 공백이 아니면 "비밀번호를 확인해주세요"
+ 서로 달라도 비밀번호가 공백이면 "비밀번호를 입력해주세요"
+ 서로 달라도 비밀번호 확인이 공백이면 "비밀번호 확인을 입력해주세요" 
+
+
+if (password === ""){
+    document.getElementById("passwordError").InnerHTML = "비밀번호를 입력해주세요"
+    check = false;
+    if (passwordCheck === ""){
+        document.getElementById("passwordCheckError").InnerHTML = "비밀번호를 입력해주세요"
+        check = false;
+    } else {
+        document.getElementById("passwordCheckError").InnerHTML = ""
+    }
+} else {
+    document.getElementById("passwordError").InnerHTML = ""
+}
+
+if (password !== passwordCheck && password !== "" && passwordCheck !== ""){
+    document.getElementById("passwordCheckError").InnerHTML = "비밀번호가 일치하지 않습니다"
+    check = false;
+
+} else {
+    document.getElementById("passwordError").InnerHTML = ""
+    document.getElementById("passwordCheckError").InnerHTML = ""
+    
+}
+
+
+  /* 비밀번호 공란인지 확인 */
+  if (password === "" && password !== passwordCheck) {
+    console.log("sss");
+    document.getElementById("passwordError").innerText =
+      "비밀번호가 입력해 주세요";
+    check = false;
+  } else {
+    document.getElementById("passwordError").innerHTML = "";
+  }
+  /* 비밀번호 확인 공란인지 확인 */
+  if (passwordCheck === "" && password !== passwordCheck) {
+    document.getElementById("passwordCheckError").innerHTML =
+      "비밀번호를 입력해 주세요.";
+    check = false;
+  } else {
+    document.getElementById("passwordCheckError").innerHTML = "";
+  }
+  /* 비밀번호 두개가 같은지 확인 */
+  console.log(password);
+  console.log(passwordCheck);
+  if (password !== passwordCheck && password !== "" && passwordCheck !== "") {
+    // document.getElementById("passwordError").innerHTML = "";
+    document.getElementById("passwordCheckError").innerHTML =
+      "비밀번호가 일치하지 않습니다.";
+    console.log("일치 안한다는데 왜 메세지가 안나와???");
+    check = false;
+  } else if (password !== "" && passwordCheck !== "") {
+    document.getElementById("passwordError").innerHTML = "";
+    document.getElementById("passwordCheckError").innerHTML = "";
+    console.log("잘돼?");
+  }

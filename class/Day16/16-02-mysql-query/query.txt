@@ -1,0 +1,62 @@
+show databases
+;
+
+use myproject02
+;
+
+show tables
+;
+
+desc product
+;
+
+SELECT * from product
+;
+INSERT 
+  into product(id,name,description,price,isSoldout)
+        values(uuid(),"마우스","정말좋은마우스입니다",15000,false);
+
+INSERT 
+  into product(id,name,description,price,isSoldout)
+        values(uuid(),"노트북","최신 맥북!!",20000,false)
+       ;
+
+      
+       
+ SELECT * from product_saleslocation;
+
+INSERT into product_saleslocation (id,address,addressDetail,lat,lng,meetingTime)
+values(uuid(),'구로구','구로디지털단지역',0.0,0.1,'2022-12-31');
+
+UPDATE product 
+   set name = '키보드'
+ WHERE price = 15000 
+;
+
+SELECT * from product
+WHERE name = '노트북';
+
+UPDATE product 
+   set productSaleslocationId = '78fa8dce-b3ed-11ec-9871-dc2526501fab'
+WHERE name = '노트북' ;
+
+SELECT * from product_saleslocation;
+SELECT * FROM product;
+
+SELECT p.id,p.name,p.price,ps.address,ps.addressDetail FROM product p,product_saleslocation ps
+WHERE productSaleslocationId = ps.id 
+;
+
+SELECT * from product;
+
+SELECT * from product_category;
+
+      
+UPDATE product 
+   set productCategoryId = 'd766e328-b3f0-11ec-9871-dc2526501fab'
+WHERE name = '노트북' ;
+
+
+SELECT * FROM product p, product_category pc 
+WHERE productCategoryId  = pc.id 
+;
