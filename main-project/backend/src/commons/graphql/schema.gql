@@ -1,0 +1,94 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  user_id: String!
+  state: Boolean!
+  user_email: String!
+  user_nickname: String!
+  user_name: String!
+  user_phone: String!
+  social_site: String!
+  member_since: DateTime!
+  member_data_update: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Post {
+  post_id: String!
+  contents: String!
+  title: String!
+  like_count: Int!
+  dislike_count: Int!
+  hit: Int!
+  create_date: DateTime!
+  update_date: DateTime!
+  postTags: [PostTag!]!
+}
+
+type PostTag {
+  id: String!
+  names: String!
+  posts: [Post!]!
+}
+
+type Query {
+  fetchLoginUser: User!
+  fetchUser(user_email: String!): User!
+  fetchUsers: [User!]!
+  fetchPost(Postid: String!): Post!
+  fetchPosts: [Post!]!
+}
+
+type Mutation {
+  updateLoginUser(password: String!): User!
+  updateSocialUser(updateSocilaInput: UpdateSocialInput!): User!
+  deleteLoginUser: Boolean!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(user_email: String!, updateUserInput: UpdateUserInput!): User!
+  PasswordChange(user_email: String!, password: String!): User!
+  deleteUser(Postid: String!): Boolean!
+  restoreUser(user_email: String!): Boolean!
+  createPost(createPostInput: CreatePostInput!): Post!
+  updatePost(Postid: String!, updatePostInput: UpdatePostInput!): Post!
+  restorePost(Postid: String!): Boolean!
+  Userlogin(user_email: String!, password: String!): String!
+  restoreAccessToken: String!
+}
+
+input UpdateSocialInput {
+  user_nickname: String
+}
+
+input CreateUserInput {
+  user_email: String!
+  password: String!
+  user_name: String!
+  user_phone: String!
+  user_nickname: String!
+  address: String!
+}
+
+input UpdateUserInput {
+  user_email: String!
+  password: String!
+  user_phone: String!
+  address: String!
+}
+
+input CreatePostInput {
+  contents: String!
+  title: String!
+  postTags: [String!]!
+}
+
+input UpdatePostInput {
+  contents: String
+  title: String
+  postTags: [String!]
+}
