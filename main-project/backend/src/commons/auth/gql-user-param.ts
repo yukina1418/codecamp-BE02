@@ -3,6 +3,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 
 export interface ICurrentUser {
   user_email: string;
+  user_id: string;
 }
 
 export const CurrentUser = createParamDecorator(

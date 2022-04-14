@@ -1,23 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from 'src/apis/User/models/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
-  constructor() {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {
     super({
       //
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), // 헤더단에서 "authorization":"Bearer token"를 받아와서 Bearer를 지우고 토큰만 읽어온다
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: 'myAccessKey',
-    }); // 여기는 토큰 비밀번호
-  } // 검증부
+    });
+  }
 
-  validate(payload) {
+  async validate(payload) {
+    const user = await this.userRepository
+      .createQueryBuilder()
+      .where({ user_email: payload.user_email })
+      .getOne();
+
     return {
       user_email: payload.user_email,
+      user_id: user.user_id,
     };
-    // 리턴되면 실행 context.req.user에 담겨져있음
-  } // 검증 완료시 실행
+  }
 }
 
 // 쿼리가 실행이 되기 전에 검증

@@ -25,7 +25,7 @@ export class AuthService {
     // SameSite=None; Secure; httpOnly;`
     // )
   }
-  getAccessToken({ user }) {
+  async getAccessToken({ user }) {
     // JWT는 누구나 열어볼 수 있기 때문에 최대한 적은 데이터로 사용하는게 좋다
     return this.jwtService.sign(
       { user_email: user.user_email },

@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { User_Rank } from 'src/apis/UserRank/models/entities/user_rank.entity';
 import {
   Column,
@@ -42,6 +42,10 @@ export class User {
   @Column({ nullable: true })
   @Field(() => String)
   user_phone: string;
+
+  @Column({ default: 0 })
+  @Field(() => Int)
+  point: number;
 
   @Column({ default: '우리 사이트' })
   @Field(() => String)

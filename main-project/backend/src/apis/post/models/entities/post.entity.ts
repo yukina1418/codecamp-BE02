@@ -4,11 +4,13 @@ import { User } from 'src/apis/User/models/entities/user.entity';
 
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
@@ -32,21 +34,13 @@ export class Post {
 
   @Column({ default: 0 })
   @Field(() => Int)
-  dislike_count: number;
-
-  @Column({ default: 0 })
-  @Field(() => Int)
   hit: number;
 
-  @Column({
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-    type: 'timestamp',
-  })
+  @CreateDateColumn()
   @Field(() => Date)
   create_date: Date;
 
-  @Column({ nullable: true })
+  @UpdateDateColumn()
   @Field(() => Date)
   update_date: Date;
 

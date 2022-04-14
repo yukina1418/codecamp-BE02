@@ -1,6 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @ObjectType()
 @Entity()
@@ -17,11 +22,7 @@ export class Subscription {
   @Field(() => String)
   payment_type: string;
 
-  @Column({
-    nullable: false,
-    default: () => 'CURRENT_TIMESTAMP',
-    type: 'timestamp',
-  })
+  @CreateDateColumn()
   @Field(() => Date)
   payment_date: Date;
 

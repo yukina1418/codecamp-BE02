@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PostTag } from '../postTag/models/entities/postTag.entity';
+import { User } from '../User/models/entities/user.entity';
 import { Post } from './models/entities/post.entity';
 
 @Injectable()
@@ -12,6 +13,9 @@ export class PostService {
 
     @InjectRepository(PostTag)
     private readonly PostTagRepository: Repository<PostTag>,
+
+    @InjectRepository(User)
+    private readonly UserRepository: Repository<User>,
   ) {}
 
   async findOne({ Postid }) {
@@ -23,7 +27,14 @@ export class PostService {
   async findAll() {
     return await this.PostRepository.find({ relations: ['postTags'] });
   }
-  async create({ createPostInput }) {
+  //
+  async logfind({ currentUser }) {
+    return this.PostRepository.createQueryBuilder()
+      .where({ user: currentUser.user_id })
+      .getMany();
+  }
+  //
+  async create({ currentUser, createPostInput }) {
     const { postTags, ...post } = createPostInput;
 
     const TagArr = [];
@@ -43,12 +54,27 @@ export class PostService {
         TagArr.push(NewTag);
       }
     }
-    console.log(TagArr);
 
-    return await this.PostRepository.save({
+    const NewPosrt = await this.PostRepository.save({
       ...post,
       postTags: TagArr,
+      user: { user_id: currentUser.user_id },
     });
+
+    return NewPosrt;
+  }
+
+  async checkID({ currentUser, Postid }) {
+    const Post = await this.PostRepository.findOne({
+      where: { post_id: Postid },
+      relations: ['user'],
+    });
+
+    if (Post.user.user_id !== currentUser.user_id) {
+      throw new ConflictException('해당 글의 작성자가 아닙니다.');
+    } else {
+      return true;
+    }
   }
 
   async update({ Postid, updatePostInput }) {

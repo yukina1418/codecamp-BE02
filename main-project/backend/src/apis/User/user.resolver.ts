@@ -12,16 +12,53 @@ import { UpdateSocialInput } from './dto/updateSocial.input';
 export class UserResolver {
   constructor(private readonly userService: UserService) {} // 이렇게 쓰면 서비스 ts에 있는 클래스를 가져다가 쓸 수 있음
 
+  // Create Api Create Api Create Api Create Api Create Api Create Api Create Api Create Api Create Api //
+  @Mutation(() => User)
+  createUser(
+    @Args('createUserInput') createUserInput: CreateUserInput, // args == 주는쪽
+  ) {
+    return this.userService.create({ createUserInput });
+  }
+
+  // Read Api Read Api Read Api Read Api Read Api Read Api Read Api Read Api Read Api Read Api Read Api  //
+  @Query(() => User)
+  fetchUser(
+    //
+    @Args('user_email') user_email: string,
+  ) {
+    return this.userService.findOne({ user_email });
+  }
+  @Query(() => [User])
+  fetchUsers() {
+    return this.userService.findAll();
+  }
+  //
+  //
   @UseGuards(GqlAuthAccessGuard)
   @Query(() => User)
   fetchLoginUser(
     //
     @CurrentUser() currentUser: any,
   ) {
-    const user_email = currentUser.user_email;
-    return this.userService.findOne({ user_email });
+    return this.userService.findOne({ user_email: currentUser.user_email });
+  }
+  // Update Api Update Api  Update Api  Update Api  Update Api  Update Api  Update Api  Update Api  Update Api  //
+  @Mutation(() => User)
+  async updateUser(
+    @Args('user_email') user_email: string,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return await this.userService.update({ user_email, updateUserInput }); // <- 이거 지워도 댐 로그인 안한 상태로 정보 바꾼다는거는 비번찾기만 가능
   }
   //
+  //
+  @Mutation(() => User)
+  async PasswordChange(
+    @Args('user_email') user_email: string,
+    @Args('password') password: string,
+  ) {
+    return await this.userService.ChangePW({ user_email, password });
+  }
   //
   //
   @UseGuards(GqlAuthAccessGuard)
@@ -31,10 +68,13 @@ export class UserResolver {
     @CurrentUser() currentUser: any,
     @Args('password') password: string,
   ) {
-    const user_email = currentUser.user_email;
-    return this.userService.loginUpdate({ user_email, password });
+    return this.userService.loginUpdate({
+      user_email: currentUser.user_email,
+      password,
+    });
   }
-  ////////
+  //
+  //
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => User)
   async updateSocialUser(
@@ -42,68 +82,31 @@ export class UserResolver {
     @CurrentUser() currentUser: any,
     @Args('updateSocilaInput') updateSocilaInput: UpdateSocialInput,
   ) {
-    const user_email = currentUser.user_email;
-    return this.userService.SocialUpdate({ user_email, updateSocilaInput });
+    return this.userService.SocialUpdate({
+      user_email: currentUser.user_email,
+      updateSocilaInput,
+    });
   }
 
-  //
-  //
-  //
+  // Delete Api Delete Api Delete Api Delete Api Delete Api Delete Api Delete Api Delete Api Delete Api Delete Api //
   @UseGuards(GqlAuthAccessGuard)
   @Mutation(() => Boolean)
   deleteLoginUser(
     //
     @CurrentUser() currentUser: any,
   ) {
-    const user_email = currentUser.user_email;
-    return this.userService.delete({ user_email });
+    return this.userService.delete({ user_email: currentUser.user_email });
   }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  @Query(() => User)
-  fetchUser(
-    //
-    @Args('user_email') user_email: string,
-  ) {
-    return this.userService.findOne({ user_email });
-  }
-
-  @Query(() => [User])
-  fetchUsers() {
-    return this.userService.findAll();
-  }
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  @Mutation(() => User)
-  createUser(
-    @Args('createUserInput') createUserInput: CreateUserInput, // args == 주는쪽
-  ) {
-    return this.userService.create({ createUserInput });
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-  @Mutation(() => User)
-  async updateUser(
-    @Args('user_email') user_email: string,
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
-  ) {
-    return await this.userService.update({ user_email, updateUserInput });
-  }
-
-  @Mutation(() => User)
-  async PasswordChange(
-    @Args('user_email') user_email: string,
-    @Args('password') password: string,
-  ) {
-    return await this.userService.passwordFind({ user_email, password });
-  }
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  //
   @Mutation(() => Boolean)
   deleteUser(
     @Args('user_email') user_email: string, //
   ) {
     return this.userService.delete({ user_email });
   }
-
+  //
+  //
   @Mutation(() => Boolean)
   restoreUser(
     @Args('user_email') user_email: string, //

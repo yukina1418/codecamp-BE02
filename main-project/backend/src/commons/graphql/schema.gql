@@ -9,6 +9,7 @@ type User {
   user_nickname: String!
   user_name: String!
   user_phone: String!
+  point: Int!
   social_site: String!
   member_since: DateTime!
   member_data_update: DateTime!
@@ -19,12 +20,24 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type PointTransaction {
+  id: String!
+  impUid: String!
+  amount: Int!
+  status: POINT_TRANSACTION_STATUS_ENUM!
+  createAt: DateTime!
+}
+
+enum POINT_TRANSACTION_STATUS_ENUM {
+  PAYMENT
+  CANCEL
+}
+
 type Post {
   post_id: String!
   contents: String!
   title: String!
   like_count: Int!
-  dislike_count: Int!
   hit: Int!
   create_date: DateTime!
   update_date: DateTime!
@@ -38,31 +51,30 @@ type PostTag {
 }
 
 type Query {
-  fetchLoginUser: User!
   fetchUser(user_email: String!): User!
   fetchUsers: [User!]!
+  fetchLoginUser: User!
   fetchPost(Postid: String!): Post!
   fetchPosts: [Post!]!
+  fetchloginPosts: [Post!]!
 }
 
 type Mutation {
-  updateLoginUser(password: String!): User!
-  updateSocialUser(updateSocilaInput: UpdateSocialInput!): User!
-  deleteLoginUser: Boolean!
   createUser(createUserInput: CreateUserInput!): User!
   updateUser(user_email: String!, updateUserInput: UpdateUserInput!): User!
   PasswordChange(user_email: String!, password: String!): User!
+  updateLoginUser(password: String!): User!
+  updateSocialUser(updateSocilaInput: UpdateSocialInput!): User!
+  deleteLoginUser: Boolean!
   deleteUser(Postid: String!): Boolean!
   restoreUser(user_email: String!): Boolean!
   createPost(createPostInput: CreatePostInput!): Post!
+  checkPost(Postid: String!): Post!
   updatePost(Postid: String!, updatePostInput: UpdatePostInput!): Post!
   restorePost(Postid: String!): Boolean!
   Userlogin(user_email: String!, password: String!): String!
   restoreAccessToken: String!
-}
-
-input UpdateSocialInput {
-  user_nickname: String
+  createPointTransaction(impUid: String!, amount: Float!): PointTransaction!
 }
 
 input CreateUserInput {
@@ -79,6 +91,10 @@ input UpdateUserInput {
   password: String!
   user_phone: String!
   address: String!
+}
+
+input UpdateSocialInput {
+  user_nickname: String
 }
 
 input CreatePostInput {
