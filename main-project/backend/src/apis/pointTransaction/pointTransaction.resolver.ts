@@ -20,12 +20,27 @@ export class PointTransactionResolver {
     @Args('impUid') impUid: string,
     @Args('amount') amount: number,
   ) {
-    console.log(currentUser);
-    console.log(currentUser.user_email);
     return this.pointTransactionService.create({
-      currentUser: currentUser.user_email,
+      currentUser,
       impUid,
       amount,
+    });
+  }
+
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => PointTransaction)
+  cancelPointTransaction(
+    //
+    @CurrentUser() currentUser: ICurrentUser,
+    @Args('impUid') impUid: string,
+    @Args('amount') amount: number,
+    @Args('reason') reason: string,
+  ) {
+    return this.pointTransactionService.cancel({
+      currentUser,
+      impUid,
+      amount,
+      reason,
     });
   }
 }

@@ -11,8 +11,9 @@ import {
 
 export enum POINT_TRANSACTION_STATUS_ENUM {
   PAYMENT = 'PAYMENT',
-  CANCEL = 'CANCEL',
+  CANCELLED = 'CANCELLED',
 }
+// cancelled
 
 // 그래프큐엘에서 ENUM타입 쓰는 법
 registerEnumType(POINT_TRANSACTION_STATUS_ENUM, {
@@ -33,6 +34,10 @@ export class PointTransaction {
   @Column()
   @Field(() => Int)
   amount: number;
+
+  @Column()
+  @Field(() => Int)
+  checksum: number;
 
   @Column({ type: 'enum', enum: POINT_TRANSACTION_STATUS_ENUM }) // 이렇게 쓰면 둘 중 한개로만 나옴
   @Field(() => POINT_TRANSACTION_STATUS_ENUM)
