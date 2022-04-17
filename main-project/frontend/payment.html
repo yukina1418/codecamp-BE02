@@ -16,13 +16,14 @@
             const impUid = document.getElementById("UID").value
             const amount = Number(document.getElementById("price").value)
             const reason = document.getElementById("reason").value
-            console.log(impUid)
+
             const data = await axios.post(
                 "http://localhost:3000/graphql",
                 { query: `mutation {cancelPointTransaction(impUid: "${impUid}", amount: ${amount}, reason:"${reason}") {id}}`, },
                 {
-                    headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoieXVraW5hMTQxOEBnbWFpbC5jb20iLCJpYXQiOjE2NTAwMjkyNzgsImV4cCI6MTY1MDAzMjg3OH0.eC7oVcf0NFt1LHs8c84iCVOfAWmyRU8EwRkmgwcasyU", },
+                    headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoicGt5b3Vka0BuYXZlci5jb21tIiwiaWF0IjoxNjUwMDg1NDExLCJleHAiOjE2NTAwODkwMTF9.HI8pUymQxh5QhKWig5efw8ySXWtyZA2jretkHfzMxHs", },
                 });
+            console.log(data)
 
 
 
@@ -58,11 +59,11 @@
                     pg: "html5_inicis",
                     pay_method: "card",
                     merchant_uid: `${item.data.data.createItem.id}`,
-                    name: `${pick}`,
+                    name: `${pick} 외 n개`,
                     amount: `${myAmount}`,
-                    buyer_email: "gildong@gmail.com",
-                    buyer_name: "홍길동",
-                    buyer_tel: "010-4242-4242",
+                    buyer_email: "yukina1418@gmail.com",
+                    buyer_name: "유도근",
+                    buyer_tel: "010-3401-7015",
                     buyer_addr: "서울특별시 강남구 신사동",
                     buyer_postcode: "01181",
                     m_redirect_url: "", // 모바일 결제후 리다이렉트될 주소!!
@@ -71,14 +72,18 @@
                     // callback
                     if (rsp.success) {
                         // 결제 성공시
+                        console.log("======")
                         console.log(rsp);
+                        console.log("======")
                         const data = await axios.post(
                             "http://localhost:3000/graphql",
                             { query: `mutation {createPointTransaction(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}) {id}}`, },
                             {
-                                headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoieXVraW5hMTQxOEBnbWFpbC5jb20iLCJpYXQiOjE2NTAwMjkyNzgsImV4cCI6MTY1MDAzMjg3OH0.eC7oVcf0NFt1LHs8c84iCVOfAWmyRU8EwRkmgwcasyU", },
+                                headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoicGt5b3Vka0BuYXZlci5jb21tIiwiaWF0IjoxNjUwMDg1NDExLCJleHAiOjE2NTAwODkwMTF9.HI8pUymQxh5QhKWig5efw8ySXWtyZA2jretkHfzMxHs", },
                             });
+                        console.log("************")
                         console.log(data);
+                        console.log("************")
                     } else {
                         // 결제 실패시
                         alert("결제실패!")
@@ -100,10 +105,13 @@
     환불할 금액 <input type="text" id="price">
     환불 사유 <input type="text" id="reason">
     <button onclick="cancelPay()">환불하기</button>
+    <div>
+        <div>
+            결제할 금액: <input type="text" id="amount" />
+            구매하는 물품 :<input type="text" id="pick" />
+        </div>
 
-    <!-- jQuery CDN --->
-
-
+    </div>
 </body>
 
 </html>

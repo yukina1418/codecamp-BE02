@@ -13,7 +13,7 @@ export class IamportService {
       .post('https://api.iamport.kr/users/getToken', {
         imp_key: '6404604046350897', // REST API키
         imp_secret:
-          'd985bccc19517f42ca85d0ab922976b66b8405064561b2f5c575343d1864d967ce159d705b3b878d', // REST API Secret
+          'w4jaMSbrWUQrSrJOErYHlMa63uwNeRLKV5VHY69V00nTs6H6xGOTtZZwtwkIn6tjbo1ava6vbtpDz7K7', // REST API Secret
       })
       .toPromise();
 
@@ -61,6 +61,6 @@ export class IamportService {
       )
       .toPromise();
 
-    return cancel.data.response;
+    return cancel.data;
   }
 }

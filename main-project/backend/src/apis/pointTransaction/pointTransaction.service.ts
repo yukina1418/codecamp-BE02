@@ -34,48 +34,71 @@ export class PointTransactionService {
       where: { impUid },
     });
 
-    if (overlapPeyment)
-      throw new ConflictException('중복된 결제가 존재하여 결제를 취소합니다.');
-    await this.iamportService.CancelPayment({
-      token,
-      imp_uid: impUid,
-      amount: getData.amount,
-      reason: '비정상 결제',
-    });
+    // if (!overlapPeyment)
+    //   throw new ConflictException('중복된 결제가 존재하여 결제를 취소합니다.');
+    // await this.iamportService.CancelPayment({
+    //   token,
+    //   imp_uid: impUid,
+    //   amount: getData.amount,
+    //   reason: '중복 결제',
+    // });
 
-    if (amount !== getData.amount)
+    // if (amount !== getData.amount)
+    //   throw new ConflictException(
+    //     '비정상적인 결제가 확인되어 강제 환불이 진행됩니다.',
+    //   );
+    // await this.iamportService.CancelPayment({
+    //   token,
+    //   imp_uid: impUid,
+    //   amount: getData.amount,
+    //   reason: '강제 환불',
+    // });
+
+    if (overlapPeyment) {
+      await this.iamportService.CancelPayment({
+        token,
+        imp_uid: impUid,
+        amount: getData.amount,
+        reason: '중복 결제',
+      });
+      throw new ConflictException('중복된 결제가 존재하여 결제를 취소합니다.');
+    } else if (amount !== getData.amount) {
+      await this.iamportService.CancelPayment({
+        token,
+        imp_uid: impUid,
+        amount: getData.amount,
+        reason: '비정상 거래',
+      });
       throw new ConflictException(
         '비정상적인 결제가 확인되어 강제 환불이 진행됩니다.',
       );
-    await this.iamportService.CancelPayment({
-      token,
-      imp_uid: impUid,
-      amount: getData.amount,
-      reason: '비정상 결제',
-    });
+    } else {
+      console.log('aaa');
+      console.log(impUid, amount);
+      const pointTransaction = await this.pointTransactionRepository.save({
+        impUid,
+        amount,
+        checksum: amount,
+        status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
+        user: { user_id: currentUser.user_id },
+      });
 
-    const pointTransaction = await this.pointTransactionRepository.save({
-      impUid,
-      amount,
-      checksum: amount,
-      status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
-      user: { user_id: currentUser.user_id },
-    });
+      const user = await this.userRepository.findOne({
+        where: { user_email: currentUser.user_email },
+      });
 
-    const user = await this.userRepository.findOne({
-      where: { user_email: currentUser.user_email },
-    });
+      await this.userRepository.update(
+        { user_email: currentUser.user_email },
+        { point: user.point + amount },
+      );
 
-    await this.userRepository.update(
-      { user_email: currentUser.user_email },
-      { point: user.point + amount },
-    );
-
-    return pointTransaction;
+      return pointTransaction;
+    }
   }
 
   async cancel({ currentUser, impUid, amount, reason }) {
     const token = await this.iamportService.getToken();
+    //
     const Payment_history = await this.iamportService.get_data_with_impUid({
       token,
       impUid,
@@ -84,15 +107,17 @@ export class PointTransactionService {
     if (!Payment_history)
       throw new ConflictException('결제 내역이 존재하지 않습니다.');
 
+    const Payment_data = await this.pointTransactionRepository.findOne({
+      where: { impUid },
+    });
+
     const userdata = await this.userRepository.findOne({
       where: { user_email: currentUser.user_email },
     });
 
-    const checksum = Payment_history.amount - Payment_history.cancel_amount;
-
-    if (checksum - amount < 0)
+    if (Payment_data.checksum - amount < 0)
       throw new ConflictException(
-        `부분 환불이 진행되어 현재 입력한 포인트는 환불이 불가능합니다. 최대 환불 포인트는 ${checksum} 입니다.`,
+        `부분 환불이 진행되어 현재 입력한 포인트는 환불이 불가능합니다. 최대 환불 포인트는 ${Payment_data.checksum} 입니다.`,
       );
 
     if (amount > userdata.point)
@@ -102,41 +127,52 @@ export class PointTransactionService {
 
     if (amount === 0) {
       // 전액 환불
-      await this.pointTransactionRepository.save({
-        impUid,
-        amount: -amount,
-        status: POINT_TRANSACTION_STATUS_ENUM.CANCELLED,
-        user: { user_id: currentUser.user_id },
-      });
+
       await this.iamportService.CancelPayment({
         token,
         imp_uid: impUid,
         reason,
         amount: Payment_history.amount,
       });
-      await this.userRepository.update(
-        { user_email: currentUser.user_email },
-        { point: userdata.point - amount },
-      );
-    } else {
-      // 부분 환불
       await this.pointTransactionRepository.save({
         impUid,
-        amount: -amount,
+        amount: -Payment_data.amount,
+        checksum: Payment_data.checksum - Payment_data.amount,
         status: POINT_TRANSACTION_STATUS_ENUM.CANCELLED,
         user: { user_id: currentUser.user_id },
       });
+      await this.userRepository.update(
+        { user_email: currentUser.user_email },
+        { point: userdata.point - Payment_data.amount },
+      );
+    } else {
+      // 부분 환불
+
       const check = await this.iamportService.CancelPayment({
         token,
         imp_uid: impUid,
         reason,
         amount,
       });
-      console.log(check);
-      await this.userRepository.update(
-        { user_email: currentUser.user_email },
-        { point: userdata.point - amount },
-      );
+
+      if (check.code === -1) {
+        throw new ConflictException(
+          `결제취소에 실패하였습니다. 취소금액이 미정산 금액보다 큽니다.`,
+        );
+      } else {
+        await this.pointTransactionRepository.save({
+          impUid,
+          amount: -amount,
+          checksum: Payment_data.checksum - amount,
+          status: POINT_TRANSACTION_STATUS_ENUM.CANCELLED,
+          user: { user_id: currentUser.user_id },
+        });
+
+        await this.userRepository.update(
+          { user_email: currentUser.user_email },
+          { point: userdata.point - amount },
+        );
+      }
     }
   }
 }

@@ -60,6 +60,7 @@ export class PostService {
       postTags: TagArr,
       user: { user_id: currentUser.user_id },
     });
+    console.log(NewPosrt);
 
     return NewPosrt;
   }

@@ -20,6 +20,8 @@ registerEnumType(POINT_TRANSACTION_STATUS_ENUM, {
   name: 'POINT_TRANSACTION_STATUS_ENUM',
 });
 
+export abstract class Content {}
+
 @ObjectType()
 @Entity()
 export class PointTransaction {

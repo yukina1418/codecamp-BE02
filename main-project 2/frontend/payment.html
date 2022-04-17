@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>결제하기</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+
+        async function api() {
+            const getToken = await axios({
+                url: "https://api.iamport.kr/users/getToken",
+                method: "post", // POST method
+                headers: { "Content-Type": "application/json" }, // "Content-Type": "application/json"
+                data: {
+                    imp_key: "6404604046350897", // REST API키
+                    imp_secret: "d985bccc19517f42ca85d0ab922976b66b8405064561b2f5c575343d1864d967ce159d705b3b878d" // REST API Secret
+                }
+            });
+            console.log(getToken.data.response)
+        }
+
+        //##        멘토님 보고 계씹니까........ 아니 cors 어케 뚫고 들어갑니까....? ##
+        // 프론트단에서 못넣으면 어떻게해야하는가...
+        // async function check() {
+        //     const myAmount = Number(document.getElementById("amount").value);
+        //     const pick = document.getElementById("pick").value
+
+        //     const item = await axios.post("http://localhost:3000/graphql",
+        //         { query: `mutation {createItem(amount: ${myAmount}, pick: "${pick}") {id}}`, })
+
+        // }
+        async function mypayment() {
+            const myAmount = Number(document.getElementById("amount").value);
+            const pick = document.getElementById("pick").value
+
+            const item = await axios.post("http://localhost:3000/graphql",
+                { query: `mutation {createItem(amount: ${myAmount}, pick: "${pick}") {id}}`, })
+
+
+            // const item = await axios.post("http://localhost:3000/graphql",
+            //     { query: `mutation {createItem(amount: "${myAmount}", pick: ${pick}) {id}}`, })
+
+            const IMP = window.IMP; // 생략 가능
+            IMP.init("imp79176283"); // Example: imp00000000
+            IMP.request_pay(
+                {
+                    // param
+                    pg: "html5_inicis",
+                    pay_method: "card",
+                    merchant_uid: `${item.data.data.createItem.id}`,
+                    name: `${pick}`,
+                    amount: `${myAmount}`,
+                    buyer_email: "gildong@gmail.com",
+                    buyer_name: "홍길동",
+                    buyer_tel: "010-4242-4242",
+                    buyer_addr: "서울특별시 강남구 신사동",
+                    buyer_postcode: "01181",
+                    m_redirect_url: "", // 모바일 결제후 리다이렉트될 주소!!
+                },
+                async (rsp) => {
+                    // callback
+                    if (rsp.success) {
+                        // 결제 성공시
+                        console.log(rsp);
+                        const data = await axios.post(
+                            "http://localhost:3000/graphql",
+                            { query: `mutation {createPointTransaction(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}) {id}}`, },
+                            {
+                                headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoieXVraW5hMTQxOEBnbWFpbC5jb20iLCJpYXQiOjE2NDk5NDM0ODYsImV4cCI6MTY0OTk0NzA4Nn0.Tnh-2rhwdNPXUwHBSIvgkIl6RkdhTgU6goum9QyizD4", },
+                            });
+                        console.log(data);
+                    } else {
+                        // 결제 실패시
+                        alert("결제실패!")
+                    }
+                }
+            );
+        }
+    </script>
+</head>
+
+<body>
+
+    결제할 금액: <input type="text" id="amount" />
+    구매하는 물품 :<input type="text" id="pick" />
+    <button onclick="mypayment(),check()">결제하기</button>
+    <button onclick="api()"> 짠짠 </button>
+
+
+</body>
+
+</html>

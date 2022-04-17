@@ -3,12 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from './models/entities/user.entity';
+import { CartService } from '../cart/cart.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
+    private readonly CartService: CartService,
   ) {}
   // Create Api Create Api Create Api Create Api Create Api Create Api Create Api Create Api Create Api //
   async create({ createUserInput }) {
@@ -23,6 +25,8 @@ export class UserService {
     const result = await this.UserRepository.save({
       ...createUserInput,
     });
+
+    await this.CartService.create({ user_id: result.user_id });
     return result;
   }
   //
