@@ -16,14 +16,6 @@ export class AuthService {
     );
     // 개발 환경
     res.setHeader('Set-Cookie', `refreshToken=${refreshToken}`);
-
-    // 배포 환경
-    // res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com') // 허용해주는 사이트
-    // res.setHeader(
-    //   'Set-Cookie',
-    //   `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com;
-    // SameSite=None; Secure; httpOnly;`
-    // )
   }
   async getAccessToken({ user }) {
     // JWT는 누구나 열어볼 수 있기 때문에 최대한 적은 데이터로 사용하는게 좋다
@@ -46,3 +38,11 @@ export class AuthService {
 // 1시간 1h
 // 1일 1d
 // 1주일 1w
+
+// 배포 환경
+// res.setHeader('Access-Control-Allow-Origin', 'https://myfrontsite.com') // 허용해주는 사이트
+// res.setHeader(
+//   'Set-Cookie',
+//   `refreshToken=${refreshToken}; path=/; domain=.mybacksite.com;
+// SameSite=None; Secure; httpOnly;`
+// )

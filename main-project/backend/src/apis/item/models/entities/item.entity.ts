@@ -23,7 +23,7 @@ export class Item {
   @Field(() => String)
   pick: string;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   volume: number;
 

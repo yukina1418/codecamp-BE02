@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ItemService } from '../item/item.service';
 import { Item } from '../item/models/entities/item.entity';
+import { User } from '../User/models/entities/user.entity';
 import { Cart } from './modules/entities/cart.entity';
 
 @Injectable()
@@ -13,6 +14,9 @@ export class CartService {
 
     @InjectRepository(Item)
     private readonly itemRepository: Repository<Item>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create({ user_id }) {
@@ -38,6 +42,14 @@ export class CartService {
       .where({ user: date.user_id })
       .getOne();
 
+    const aaaa = await this.CartRepository.findOne({
+      where: { id: user_cart.id },
+      relations: ['items', 'user'],
+    });
+
+    for (let i = 0; i < aaaa.items.length; i++) {}
+    console.log(aaaa.items[0]);
+    console.log(aaaa.items[1]);
     if (!user_cart) {
       // 장바구니가 없을 경우 생성
       const arr = [];
@@ -45,7 +57,8 @@ export class CartService {
       console.log('추가');
       const createCart = await this.CartRepository.save({
         user: { user_id: date.user_id },
-        name: '10',
+        name: PlusCart.pick,
+        sum: PlusCart.amount,
         items: arr,
       });
 
@@ -71,7 +84,11 @@ export class CartService {
       console.log('업데이트');
       const Update_Cart = await this.CartRepository.save({
         ...Read_User_Data,
+        name: user_cart.name + '외 1개',
+        sum: user_cart.sum + PlusCart.amount,
       });
+
+      console.log(Update_Cart);
 
       return Update_Cart;
     }
@@ -141,3 +158,10 @@ export class CartService {
 //   where: { name: '10' },
 //   relations: ['items', 'user'],
 // });
+
+// 장바구니
+
+// 장바구니 Id// 총액 // 유저Id(조인) // 물건id(조인) // [물건id,갯수]
+
+// 장바구니 // 총액 // 유저ID // 물건 이름 // 갯수(6)
+//  => 결제 // 상품 => 6개 토마토 => Id[]

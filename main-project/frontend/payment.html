@@ -21,7 +21,7 @@
                 "http://localhost:3000/graphql",
                 { query: `mutation {cancelPointTransaction(impUid: "${impUid}", amount: ${amount}, reason:"${reason}") {id}}`, },
                 {
-                    headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoicGt5b3Vka0BuYXZlci5jb21tIiwiaWF0IjoxNjUwMDg1NDExLCJleHAiOjE2NTAwODkwMTF9.HI8pUymQxh5QhKWig5efw8ySXWtyZA2jretkHfzMxHs", },
+                    headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoieXVraW5hMTQxOEBnbWFpbC5jb20iLCJpYXQiOjE2NTAyODc1NjgsImV4cCI6MTY1MDI5MTE2OH0.daT1_PBAK8kOHtC6nbTj7d1-iMLWBGGAj3XoCHPOkWk", },
                 });
             console.log(data)
 
@@ -79,7 +79,7 @@
                             "http://localhost:3000/graphql",
                             { query: `mutation {createPointTransaction(impUid: "${rsp.imp_uid}", amount: ${rsp.paid_amount}) {id}}`, },
                             {
-                                headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoicGt5b3Vka0BuYXZlci5jb21tIiwiaWF0IjoxNjUwMDg1NDExLCJleHAiOjE2NTAwODkwMTF9.HI8pUymQxh5QhKWig5efw8ySXWtyZA2jretkHfzMxHs", },
+                                headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2VtYWlsIjoieXVraW5hMTQxOEBnbWFpbC5jb20iLCJpYXQiOjE2NTAyODc1MTMsImV4cCI6MTY1MDI5MTExM30.BK2LD9W5XA0mBPSRm7-hea41QFPNev3369arKgkouuU", },
                             });
                         console.log("************")
                         console.log(data);

@@ -2,12 +2,15 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
 import { AuthModule } from './apis/auth/auth.module';
 import { CartModule } from './apis/cart/cart.module';
 import { IamportModule } from './apis/iamport/iamport.module';
 import { ItemModule } from './apis/item/item.module';
 import { pointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 import { PostModule } from './apis/post/post.module';
+import { ProductModule } from './apis/product/product.module';
+import { ProductInfoModule } from './apis/productinfo/productinfo.module';
 import { SubscriptionModule } from './apis/subscription/subscription.module';
 import { UserModule } from './apis/User/user.module';
 
@@ -23,6 +26,8 @@ import { UserModule } from './apis/User/user.module';
     pointTransactionModule,
     ItemModule,
     IamportModule,
+    ProductModule,
+    ProductInfoModule,
     CartModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -46,6 +51,8 @@ import { UserModule } from './apis/User/user.module';
   // controllers: [AppController],
   // providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly connection: Connection) {}
+}
 
 // 모듈에서 함수를 서로 이어주는 역할을 지정한다

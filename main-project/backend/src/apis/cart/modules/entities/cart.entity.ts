@@ -22,6 +22,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -42,6 +43,10 @@ export class Cart {
   @Field(() => Int)
   sum: number;
 
+  @Column({ nullable: true })
+  @Field(() => String)
+  productData: string;
+
   @CreateDateColumn()
   @Field(() => Date)
   createAt: Date;
@@ -50,10 +55,13 @@ export class Cart {
   @Field(() => Date)
   updateAt: Date;
 
-  @JoinColumn()
-  @OneToOne(() => User)
-  @Field(() => User)
+  @ManyToOne(() => User)
   user: User;
+
+  // @JoinColumn()
+  // @OneToOne(() => User)
+  // @Field(() => User)
+  // user: User;
 
   @JoinTable()
   @ManyToMany(() => Item, (items) => items.carts)
