@@ -30,8 +30,4 @@ export class Item {
   @CreateDateColumn()
   @Field(() => Date)
   createAt: Date;
-
-  @ManyToMany(() => Cart, (carts) => carts.items)
-  @Field(() => [Cart])
-  carts: Cart[];
 }

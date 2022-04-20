@@ -1,17 +1,29 @@
-import { Post } from 'src/apis/post/models/entities/post.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Field } from '@nestjs/graphql';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
-export class Board_Image {
+export class BoardImage {
   @PrimaryGeneratedColumn('uuid')
+  @Field(() => String)
   image_id: string;
 
   @Column()
-  url: string;
+  @Field(() => String)
+  bucketName: string;
 
   @Column()
-  create_data: Date;
+  @Field(() => String)
+  url: string;
 
-  @ManyToOne(() => Post)
-  post: Post;
+  @CreateDateColumn()
+  @Field(() => Date)
+  createAt: Date;
+
+  // @ManyToOne(() => Post)
+  // post: Post;
 }

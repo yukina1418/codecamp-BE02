@@ -17,7 +17,7 @@ export class Product {
   @Field(() => String)
   product_id: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   name: string;
 

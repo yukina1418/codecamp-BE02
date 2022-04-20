@@ -14,16 +14,15 @@
 
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Item } from 'src/apis/item/models/entities/item.entity';
+import { Product } from 'src/apis/product/models/entities/product.entity';
 import { User } from 'src/apis/User/models/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -43,9 +42,13 @@ export class Cart {
   @Field(() => Int)
   sum: number;
 
-  @Column({ nullable: true })
+  @Column()
   @Field(() => String)
-  productData: string;
+  item: string;
+
+  @Column()
+  @Field(() => Int)
+  volume: number;
 
   @CreateDateColumn()
   @Field(() => Date)
@@ -58,13 +61,11 @@ export class Cart {
   @ManyToOne(() => User)
   user: User;
 
+  @ManyToOne(() => Product)
+  product: Product;
+
   // @JoinColumn()
   // @OneToOne(() => User)
   // @Field(() => User)
   // user: User;
-
-  @JoinTable()
-  @ManyToMany(() => Item, (items) => items.carts)
-  @Field(() => [Item])
-  items: Item[];
 }

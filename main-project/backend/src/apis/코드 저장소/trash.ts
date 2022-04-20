@@ -36,11 +36,10 @@
 // member_since: date.format('YYYY-MM-DD kk:mm:ss')
 
 /////////////////////////
-// const aaa = await this.userRepository
-//   .createQueryBuilder()
-//   .update()
-//   .set({ point: point + amount })
-//   .where('user_email = :user_email', {
-//     user_email: currentUser.user_email,
-//   })
-//   .execute();
+// .createQueryBuilder()
+// .update()
+// .set({ point: point + amount })
+// .where('user_email = :user_email', {
+//   user_email: currentUser.user_email,
+// })
+// .execute();

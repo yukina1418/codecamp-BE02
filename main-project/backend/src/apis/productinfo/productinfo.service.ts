@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 import { Product } from '../product/models/entities/product.entity';
 import { ProductService } from '../product/product.service';
 import { ProductInfo } from './models/entities/productinfo.entity';
@@ -52,7 +52,9 @@ export class ProductInfoService {
       ...updateProductInput,
     });
 
-    const qqq = await this.productRepository
+    console.log(updateInfo);
+
+    await this.productRepository
       .createQueryBuilder()
       .update(Product)
       .set({
@@ -62,11 +64,18 @@ export class ProductInfoService {
       .where({ info: dataInfo })
       .execute();
 
-    // const qqq = await this.productRepository
+    // const www = await getConnection()
     //   .createQueryBuilder()
-    //   .where('info = :info', { info: dataInfo })
+    //   .select('product')
+    //   .from(Product, 'product')
+    //   .where({ info: dataInfo })
     //   .getOne();
 
-    console.log(qqq);
+    // const qqq = await this.productRepository
+    //   .createQueryBuilder()
+    //   .where({ info: dataInfo })
+    //   .getOne();
+
+    return updateInfo;
   }
 }

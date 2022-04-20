@@ -4,8 +4,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { AuthModule } from './apis/auth/auth.module';
+import { BoardImageModule } from './apis/board_image/board_image.module';
 import { CartModule } from './apis/cart/cart.module';
 import { IamportModule } from './apis/iamport/iamport.module';
+import { ImageModule } from './apis/image/image.module';
 import { ItemModule } from './apis/item/item.module';
 import { pointTransactionModule } from './apis/pointTransaction/pointTransaction.module';
 import { PostModule } from './apis/post/post.module';
@@ -25,6 +27,8 @@ import { UserModule } from './apis/User/user.module';
     AuthModule,
     pointTransactionModule,
     ItemModule,
+    BoardImageModule,
+    ImageModule,
     IamportModule,
     ProductModule,
     ProductInfoModule,

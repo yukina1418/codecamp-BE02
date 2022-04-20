@@ -22,7 +22,7 @@ export class ProductInfo {
   @Field(() => Int)
   price: number;
 
-  @Column()
+  @Column('decimal', { precision: 5, scale: 2 })
   @Field(() => Float)
   sale: number;
 

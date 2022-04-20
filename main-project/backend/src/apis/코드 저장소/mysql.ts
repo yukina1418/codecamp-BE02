@@ -21,3 +21,24 @@
 // .where( { name: "Timber" })
 // .orWhere({ lastName: "Saw" });
 // .andWhere({ lastName: "Saw" });
+
+// from 1 순위
+// where 2순위
+// select 3순위
+
+// select c.*, u.*, p.*
+// from   cart c, user u, product p
+// where  u.user_id  = '0e3ceae4-afdd-406b-ab46-ff9fc789e99a'
+// and    c.userUserId = u.user_id
+// and    p.product_id = c.productProductId
+// ;
+
+// select *
+// from   cart c, product p
+// where  c.productProductId = p.product_id(+)
+// ;
+
+// update user u
+// set   u.state  = 0
+// where u.user_email = 'aa@aa.com'
+// and   u.password  = 'aaaa'
