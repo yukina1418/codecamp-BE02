@@ -26,21 +26,22 @@ export class ProductInfoService {
         ...createProductInfoInput,
       });
 
-      const aaa = await this.productService.create({
+      await this.productService.create({
         name: infoData.name,
         price: infoData.price - infoData.price * infoData.sale,
         info: infoData,
       });
-      // 아래같은 조인하는 문법도 있는데 이건 공부해봐야할듯
-      // 이렇게 쓸 수 있으면 서비스 안만들어도 돼
-      //const user = await createQueryBuilder("user")
-      // .leftJoinAndSelect("user.photos", "photo") // user의 photos를 갖고 있는 테이블을 photo로 alias
-      // .where("user.name = :name", { name: "Timber" })
-      // .getOne();
 
       return infoData;
     }
   }
+
+  // 아래같은 조인하는 문법도 있는데 이건 공부해봐야할듯
+  // 이렇게 쓸 수 있으면 서비스 안만들어도 돼
+  //const user = await createQueryBuilder("user")
+  // .leftJoinAndSelect("user.photos", "photo") // user의 photos를 갖고 있는 테이블을 photo로 alias
+  // .where("user.name = :name", { name: "Timber" })
+  // .getOne();
 
   async update({ name, updateProductInput }) {
     const dataInfo = await this.productInfoRepository.findOne({
