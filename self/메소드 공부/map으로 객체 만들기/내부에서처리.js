@@ -7,3 +7,4 @@ const arr = [
 let aaa = arr.map(([a, b]) => {
   return { name: a, age: b };
 });
+asdasd;
