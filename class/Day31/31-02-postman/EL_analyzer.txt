@@ -1,0 +1,72 @@
+##### 엘라스틱서치의 검색원리 분석하기 #####
+
+    # postman 디폴트(standard) 애널라이저 사용하기
+    POST http://localhost:9200/myproduct/_analyze
+    {
+      "text": "안녕하세요. Bestshop입니다! Best"
+    }
+
+    # postman standard 애널라이저 사용하기
+    POST http://localhost:9200/myproduct/_analyze
+    {
+      "analyzer": "standard",
+      "text": "안녕하세요. Bestshop입니다! Best"
+    }
+
+    # postman whitespace 애널라이저 사용하기
+    POST http://localhost:9200/myproduct/_analyze
+    {
+      "analyzer": "whitespace",
+      "text": "안녕하세요. Bestshop입니다! Best"
+    }
+
+    # postman keyword 애널라이저 사용하기
+    POST http://localhost:9200/myproduct/_analyze
+    {
+      "analyzer": "keyword",
+      "text": "안녕하세요. Bestshop입니다! Best"
+    }
+
+    # postman snowball 애널라이저 사용하기 - (추가실습)
+    POST http://localhost:9200/myproduct/_analyze
+    {
+      "analyzer": "snowball",
+      "text": "안녕하세요. Bestshop입니다! Best going"
+    }
+
+    # postman standard 토크나이저 사용하기 - (추가실습)
+    POST http://localhost:9200/myproduct/_analyze
+    {
+      "tokenizer": "standard",
+      "text": "안녕하세요. Bestshop입니다! Best going"
+    }
+
+    https://idea-sketch.tistory.com/64
+    https://www.elastic.co/guide/en/elasticsearch/reference/7.6/indices-analyze.html
+    https://kin3303.tistory.com/91
+
+    {
+    "settings": {
+        "analysis" : {
+            "analyzer":{
+                "my_ngram_analyzer":{
+                    "tokenizer": "my_ngram_tokenizer"
+                }
+            },
+            "tokenizer":{
+                "my_ngram_tokenizer":{
+                    "type": "nGram",
+                    "min_gram":"1",
+                    "max_gram":"10"
+                }
+            }
+        },
+            "max_ngram_diff" : "20"
+    }
+}
+
+// post _close로 닫고
+// put _settings 에 내용넣어서 적용하면 댐
+// post _open 으로 적용시키고
+// get _settings 하면 확인 가능하고
+// post _analyze에 "analyze":"my_ngram_analyzer" 넣으면 적용 완료
