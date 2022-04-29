@@ -35,6 +35,7 @@
     PUT http://localhost:9200/myproduct/_settings
     {
       "settings": {
+        "refresh_interval": "5s",
         "analysis": {
           "analyzer": {
             "my_ngram_analyzer": {

@@ -28,7 +28,7 @@ export class ProductResolver {
   ) {
     // 엘라스틱 서치에서 조회 연습하기!!
     const result = await this.elasticsearchService.search({
-      index: 'myproduct0222',
+      index: 'myproduct0222 ',
       query: {
         match: {
           description: search,
