@@ -29,7 +29,7 @@ import { UserModule } from './apis/users/user.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '34.64.215.53',
+      host: '10.60.224.6',
       port: 3306,
       username: 'root',
       password: 'root',
