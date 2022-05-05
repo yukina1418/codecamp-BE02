@@ -9,6 +9,8 @@ import { pointTransactionModule } from './apis/pointTransaction/pointTransaction
 import { ProductModule } from './apis/products/product.module';
 import { ProductCategoryModule } from './apis/productsCategory/productCategory.module';
 import { UserModule } from './apis/users/user.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 //하위 apis의 파일 각각에서 만든 api가 해당하는 폴더의 module에 합쳐지고
 // 그것을 app.module에서 호출해서 main단에서 사용한다
@@ -29,18 +31,18 @@ import { UserModule } from './apis/users/user.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.60.224.6',
+      host: '10.16.96.3',
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'myserver02',
+      database: 'mainproject',
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
     }),
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
 

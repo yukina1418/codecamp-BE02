@@ -1,0 +1,23 @@
+setps:
+  # 1단계 => docker-compose -f docker-compose.prod.yaml build
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - class/Day34/deploy-with-docker/backend/docker-compose.prod.yaml
+      - build
+  # 2단계 =>  docker-compose -f docker-compose.prod.yaml push
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - class/Day34/deploy-with-docker/backend/docker-compose.prod.yaml
+      - push
+  # 3단계 => kubectl set image deployment/testkuben test-sha256-1=asia.gcr.io/mainproject-349212/test:3.0.6
+  - name: gcr.io/cloud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/testkuben
+      - test-sha256-1=asia.gcr.io/mainproject-349212/test:3.0.9
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER=autopilot-cluster-02-1

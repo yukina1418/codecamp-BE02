@@ -13,9 +13,9 @@ export class FileService {
   async upload({ files }: IFile) {
     // console.log(files);
     const storage = new Storage({
-      keyFilename: process.env.KEYFILENAME,
+      keyFilename: '/my-secret/gcp.key.json',
       projectId: process.env.PROJECTID, // 프로젝트 아이디
-    }).bucket('file_storage_ex'); // 버켓(폴더) 이름
+    }).bucket(process.env.BUCKET); // 버켓(폴더) 이름
 
     //.file(file.filename); // 이런 이름으로 저장한다
 
@@ -28,9 +28,11 @@ export class FileService {
       waitedFiles.map((el) => {
         return new Promise((resolve, reject) => {
           el.createReadStream() // <- 스토리지에 업로드해줘
-            .pipe(storage.file(el.filename).createWriteStream()) // .pipe 읽은 파일에 옵션을 줄 때 사용한다
-            .on('finish', () => resolve(`file_storage_ex/${el.filename}`)) // <- 성공하면 이거 실행
-            .on('error', () => reject()); // <- 실패하면 이거 실행
+            .pipe(
+              storage.file(el.filename).createWriteStream({ resumable: false }),
+            ) // .pipe 읽은 파일에 옵션을 줄 때 사용한다
+            .on('finish', () => resolve(`image__data/${el.filename}`)) // <- 성공하면 이거 실행
+            .on('error', () => reject('멍청아')); // <- 실패하면 이거 실행
         });
       }),
     );
